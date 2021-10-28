@@ -30,6 +30,8 @@ export const useStopwatch = (debounceRate: number = 50) => {
 
   const resetTimer = () => {
     setCurrentTime(0);
+    setLastLap(0);
+    setLaps([]);
   };
 
   const saveLap = () => {
