@@ -46,6 +46,8 @@ const Laps: React.VFC<Props> = ({lapTimes}) => {
       <ScrollView
         style={css`
           margin-top: 20px;
+          margin-left: 35px;
+          margin-right: 35px;
         `}
         showsVerticalScrollIndicator={true}
         scrollEnabled={true}
@@ -53,7 +55,14 @@ const Laps: React.VFC<Props> = ({lapTimes}) => {
         <FlatList
           data={lapTimes}
           renderItem={({item, index}) => (
-            <Box borderTopWidth="1" borderColor="#202020" pl="4" pr="5" py="2">
+            <Box
+              borderTopWidth="1"
+              borderColor="#202020"
+              style={css`
+                padding-top: 15px;
+                padding-bottom: 15px;
+              `}
+            >
               <HStack>
                 <Text
                   style={css`
