@@ -1,4 +1,5 @@
 import {useEffect, useState} from 'react';
+import {getPrintableTime} from './time';
 import {useToggle} from './useToggle';
 
 export const useStopwatch = (debounceRate: number = 50) => {
@@ -24,10 +25,6 @@ export const useStopwatch = (debounceRate: number = 50) => {
     };
   }, [running, debounceRate]);
 
-  const minutes = ('0' + Math.floor((currentTime / 60000) % 60)).slice(-2);
-  const seconds = ('0' + Math.floor((currentTime / 1000) % 60)).slice(-2);
-  const milliSeconds = ('0' + ((currentTime / 10) % 100)).slice(-2);
-
   const resetTimer = () => {
     setCurrentTime(0);
     setLastLap(0);
@@ -35,14 +32,12 @@ export const useStopwatch = (debounceRate: number = 50) => {
   };
 
   const saveLap = () => {
-    setLaps([...laps, currentTime - lastLap]);
+    setLaps([currentTime - lastLap, ...laps]);
     setLastLap(currentTime);
   };
 
   return {
-    minutes,
-    seconds,
-    milliSeconds,
+    ...getPrintableTime(currentTime),
     running,
     toggle,
     resetTimer,

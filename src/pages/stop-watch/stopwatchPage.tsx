@@ -1,8 +1,9 @@
 import {css} from '@emotion/native';
-import {Center, Circle, Heading, HStack, Stack} from 'native-base';
+import {HStack, Stack} from 'native-base';
 import React from 'react';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
 import {useStopwatch} from '../../shared/useStopwatch';
+import Button from './components/button';
 import Clock from './components/clock';
 import Laps from './components/laps';
 
@@ -16,57 +17,93 @@ const StopwatchPage: React.VFC = () => {
     resetTimer,
     saveLap,
     laps,
-  } = useStopwatch(1000);
+  } = useStopwatch(90);
 
   return (
-    <View>
-      <Stack space={3} alignItems="center">
-        <Heading textAlign="center" mb="4" marginTop="60" fontSize="6xl">
-          <Text>Timer</Text>
-        </Heading>
-        <Clock
-          minutes={minutes}
-          seconds={seconds}
-          milliSeconds={milliSeconds}
-        />
-      </Stack>
-      <HStack space={3} mt="10" alignItems="center">
-        <Center w="230">
-          <Circle size={98} bg="secondary.400" onTouchEnd={toggle}>
-            <Text
-              style={css`
-                color: white;
-              `}
-            >
-              {running ? 'Pause' : 'Start'}
-            </Text>
-          </Circle>
-        </Center>
-        <Center>
-          {running ? (
-            <Circle size={98} bg="primary.500" onTouchEnd={saveLap}>
-              <Text
-                style={css`
-                  color: white;
-                `}
-              >
-                Lap
-              </Text>
-            </Circle>
-          ) : (
-            <Circle size={98} bg="primary.500" onTouchEnd={resetTimer}>
-              <Text
-                style={css`
-                  color: white;
-                `}
-              >
-                Reset
-              </Text>
-            </Circle>
-          )}
-        </Center>
-      </HStack>
-      <Laps lapTimes={laps} />
+    <View
+      style={css`
+        flex: 1;
+      `}
+    >
+      <View
+        style={css`
+          flex: 1;
+        `}
+      >
+        <Stack
+          space={3}
+          style={css`
+            align-items: center;
+            margin-top: auto;
+            margin-bottom: auto;
+          `}
+        >
+          <Clock
+            minutes={minutes}
+            seconds={seconds}
+            milliSeconds={milliSeconds}
+          />
+        </Stack>
+      </View>
+      <View
+        style={css`
+          flex: 1;
+        `}
+      >
+        <HStack
+          space={3}
+          style={css`
+            flex-direction: row;
+            align-items: center;
+          `}
+        >
+          <View
+            style={css`
+              margin-left: 35px;
+              margin-right: auto;
+            `}
+          >
+            {running ? (
+              <Button
+                text="Lap"
+                backgroundColor="#3d3d3d"
+                fontColor="#fff"
+                onClick={saveLap}
+              />
+            ) : (
+              <Button
+                text="Reset"
+                backgroundColor="#3d3d3d"
+                fontColor="#fff"
+                onClick={resetTimer}
+              />
+            )}
+          </View>
+          <View
+            style={css`
+              margin-left: auto;
+              margin-right: 35px;
+            `}
+          >
+            {running ? (
+              <Button
+                text="Stop"
+                backgroundColor="#420e0d"
+                fontColor="#ef4f4d"
+                onClick={toggle}
+              />
+            ) : (
+              <Button
+                text="Start"
+                backgroundColor="#1b361f"
+                fontColor="#50d137"
+                onClick={toggle}
+              />
+            )}
+          </View>
+        </HStack>
+        <Laps lapTimes={laps} />
+      </View>
     </View>
   );
 };

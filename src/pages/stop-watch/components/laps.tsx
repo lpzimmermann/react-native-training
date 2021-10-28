@@ -1,9 +1,21 @@
-import {Badge, Box, FlatList, Heading, HStack, Text, View} from 'native-base';
+import {css} from '@emotion/native';
+import {Box, FlatList, HStack, ScrollView, Text, View} from 'native-base';
 import React from 'react';
+import {getPrintableTime} from '../../../shared/time';
 
 interface Props {
   lapTimes: number[];
 }
+
+const getTimeString = ({
+  minutes,
+  seconds,
+  milliSeconds,
+}: {
+  minutes: string;
+  seconds: string;
+  milliSeconds: string;
+}) => `${minutes}:${seconds}.${milliSeconds}`;
 
 const Laps: React.VFC<Props> = ({lapTimes}) => {
   const slowestRound = lapTimes.reduce((prev, curr) => Math.max(prev, curr), 0);
@@ -17,40 +29,55 @@ const Laps: React.VFC<Props> = ({lapTimes}) => {
 
   const showBadges = fastestRound !== slowestRound;
 
+  const getColor = (index: number) => {
+    if (showBadges) {
+      if (index === fastestRoundIndex) {
+        return '#50d137';
+      } else if (index === slowestRoundIndex) {
+        return '#ef4f4d';
+      }
+    }
+
+    return '#fff';
+  };
+
   return (
-    <View mt="10">
-      <Heading fontSize="lg" textAlign="center">
-        Laps
-      </Heading>
-      <FlatList
-        data={lapTimes}
-        renderItem={({item, index}) => (
-          <Box
-            borderBottomWidth="1"
-            _dark={{
-              borderColor: 'gray.600',
-            }}
-            borderColor="coolGray.200"
-            pl="4"
-            pr="5"
-            py="2"
-          >
-            <HStack>
-              <Text w="20">{item}</Text>
-              {showBadges && index === fastestRoundIndex && (
-                <Badge colorScheme="success" variant="outline">
-                  Fastest Round
-                </Badge>
-              )}
-              {showBadges && index === slowestRoundIndex && (
-                <Badge colorScheme="danger" variant="outline">
-                  Slowest Round
-                </Badge>
-              )}
-            </HStack>
-          </Box>
-        )}
-      />
+    <View>
+      <ScrollView
+        style={css`
+          margin-top: 20px;
+        `}
+        showsVerticalScrollIndicator={true}
+        scrollEnabled={true}
+      >
+        <FlatList
+          data={lapTimes}
+          renderItem={({item, index}) => (
+            <Box borderTopWidth="1" borderColor="#202020" pl="4" pr="5" py="2">
+              <HStack>
+                <Text
+                  style={css`
+                    color: ${getColor(index)};
+                    font-size: 18px;
+                  `}
+                >
+                  Lap {lapTimes.length - index}
+                </Text>
+                <Text
+                  style={css`
+                    margin-left: auto;
+                    margin-right: 0;
+                    font-size: 18px;
+                    color: ${getColor(index)};
+                  `}
+                >
+                  {getTimeString(getPrintableTime(item))}
+                </Text>
+              </HStack>
+            </Box>
+          )}
+        />
+      </ScrollView>
     </View>
   );
 };
