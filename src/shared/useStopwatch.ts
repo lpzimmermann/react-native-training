@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {getPrintableTime} from './time';
 import {useToggle} from './useToggle';
 
@@ -25,16 +25,16 @@ export const useStopwatch = (debounceRate: number = 50) => {
     };
   }, [running, debounceRate]);
 
-  const resetTimer = () => {
+  const resetTimer = useCallback(() => {
     setCurrentTime(0);
     setLastLap(0);
     setLaps([]);
-  };
+  }, []);
 
-  const saveLap = () => {
+  const saveLap = useCallback(() => {
     setLaps([currentTime - lastLap, ...laps]);
     setLastLap(currentTime);
-  };
+  }, [currentTime, lastLap, laps]);
 
   return {
     ...getPrintableTime(currentTime),
