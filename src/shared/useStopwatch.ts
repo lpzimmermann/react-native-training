@@ -1,8 +1,7 @@
 import {useCallback, useEffect, useState} from 'react';
-import {getPrintableTime} from './time';
 import {useToggle} from './useToggle';
 
-export const useStopwatch = (debounceRate: number = 50) => {
+export const useStopwatch = (debounceRate: number = 90) => {
   const [currentTime, setCurrentTime] = useState(0);
   const [running, toggle] = useToggle();
   const [lastLap, setLastLap] = useState(0);
@@ -18,6 +17,7 @@ export const useStopwatch = (debounceRate: number = 50) => {
     } else if (interval !== null) {
       clearInterval(interval);
     }
+
     return () => {
       if (interval) {
         clearInterval(interval);
@@ -37,11 +37,12 @@ export const useStopwatch = (debounceRate: number = 50) => {
   }, [currentTime, lastLap, laps]);
 
   return {
-    ...getPrintableTime(currentTime),
+    currentTime,
     running,
     toggle,
     resetTimer,
     saveLap,
+    lastLap,
     laps,
   };
 };

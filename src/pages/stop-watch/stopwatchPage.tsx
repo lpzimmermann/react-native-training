@@ -1,23 +1,18 @@
 import {css} from '@emotion/native';
-import {HStack, Stack} from 'native-base';
+import {Box} from 'native-base';
 import React from 'react';
 import {View} from 'react-native';
+import {getPrintableTime} from '../../shared/time';
 import {useStopwatch} from '../../shared/useStopwatch';
-import Button from './components/button';
 import Clock from './components/clock';
+import Controls from './components/controls';
 import Laps from './components/laps';
 
 const StopwatchPage: React.VFC = () => {
-  const {
-    milliSeconds,
-    minutes,
-    seconds,
-    running,
-    toggle,
-    resetTimer,
-    saveLap,
-    laps,
-  } = useStopwatch(90);
+  const {currentTime, running, toggle, resetTimer, saveLap, lastLap, laps} =
+    useStopwatch();
+
+  const {milliSeconds, minutes, seconds} = getPrintableTime(currentTime);
 
   return (
     <View
@@ -30,8 +25,7 @@ const StopwatchPage: React.VFC = () => {
           flex: 1;
         `}
       >
-        <Stack
-          space={3}
+        <Box
           style={css`
             align-items: center;
             margin-top: auto;
@@ -43,66 +37,20 @@ const StopwatchPage: React.VFC = () => {
             seconds={seconds}
             milliSeconds={milliSeconds}
           />
-        </Stack>
+        </Box>
       </View>
       <View
         style={css`
           flex: 1;
         `}
       >
-        <HStack
-          space={3}
-          style={css`
-            flex-direction: row;
-            align-items: center;
-          `}
-        >
-          <View
-            style={css`
-              margin-left: 35px;
-              margin-right: auto;
-            `}
-          >
-            {running ? (
-              <Button
-                text="Lap"
-                backgroundColor="#3d3d3d"
-                fontColor="#fff"
-                onClick={saveLap}
-              />
-            ) : (
-              <Button
-                text="Reset"
-                backgroundColor="#3d3d3d"
-                fontColor="#fff"
-                onClick={resetTimer}
-              />
-            )}
-          </View>
-          <View
-            style={css`
-              margin-left: auto;
-              margin-right: 35px;
-            `}
-          >
-            {running ? (
-              <Button
-                text="Stop"
-                backgroundColor="#420e0d"
-                fontColor="#ef4f4d"
-                onClick={toggle}
-              />
-            ) : (
-              <Button
-                text="Start"
-                backgroundColor="#1b361f"
-                fontColor="#50d137"
-                onClick={toggle}
-              />
-            )}
-          </View>
-        </HStack>
-        <Laps lapTimes={laps} />
+        <Controls
+          resetTimer={resetTimer}
+          running={running}
+          saveLap={saveLap}
+          toggle={toggle}
+        />
+        <Laps lapTimes={laps} currentLap={currentTime - lastLap} />
       </View>
     </View>
   );

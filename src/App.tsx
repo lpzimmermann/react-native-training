@@ -2,15 +2,8 @@ import {css} from '@emotion/native';
 import {NativeBaseProvider} from 'native-base';
 import React from 'react';
 import {SafeAreaView, StatusBar} from 'react-native';
-import {LinearGradient} from 'react-native-svg';
 import StopwatchPage from './pages/stop-watch/stopwatchPage';
 import {useColorSchemeHelpers} from './shared/useColorSchemeHelpers';
-
-const expoGradientConfig = {
-  dependencies: {
-    'linear-gradient': LinearGradient,
-  },
-};
 
 const App = () => {
   const {isDarkMode} = useColorSchemeHelpers();
@@ -23,7 +16,7 @@ const App = () => {
       `}
     >
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <NativeBaseProvider config={expoGradientConfig}>
+      <NativeBaseProvider>
         <StopwatchPage />
       </NativeBaseProvider>
     </SafeAreaView>
