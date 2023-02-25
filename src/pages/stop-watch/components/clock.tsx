@@ -15,7 +15,7 @@ const Clock: React.VFC<Props> = ({minutes, seconds, milliSeconds}) => (
         font-size: 84px;
         line-height: 120px;
         color: #fff;
-        font-family: Sans Serif Light;
+        
         text-align: center;
       `}
     >
